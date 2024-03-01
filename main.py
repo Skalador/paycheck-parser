@@ -38,7 +38,7 @@ def findFiles():
 
 
 def extractTimePeriod(page_text):  # Obtain year and month
-    pattern = r'für den Zeitraum (\w+) (\d{4})'
+    pattern = r'(?:für den Zeitraum|aus Periode) (\w+|\d+) (\d{4})'
     match = re.search(pattern, page_text)
     if match:
         month = match.group(1)
@@ -89,7 +89,7 @@ def parseFile(filename):
 
     # read "Betriebsratsumlage" from text
     BRU = extractBRU(text)
-    if BRU == 0:
+    if BRU == 0 and month != '13':
         logger.error(
             f'Could not parse file {filename} for "Betriebsratsumlage" because it is 0, terminating ...')
         sys.exit(1)
